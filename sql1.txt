@@ -1,0 +1,277 @@
+										-- DML - Data MAnipulation Language
+
+-- select									in 				is null or is not null
+-- select distinct							between 		like
+-- Alice									limit
+-- where having comparison and logical 		Orderby, Groupby							
+                                            
+                                            
+										-- AGGREGATE FUNCTIONS --
+-- SQL aggregate function are used to perform the calculation on multiple rows of a single column
+-- and return a single value.
+-- there are different type of aggregate function are:-
+-- (1) Count()	-> count() is used to find total value of the columns.
+-- (2) Sum() 	-> sum() is used to find addition value of the columns.
+-- (3) Avg() 	-> avg() is used to find average value of the columns.
+-- (4) Min() 	-> min() is used to find lowest value of the columns.
+-- (5) Max() 	-> max() is used to find highest value of the columns.
+
+
+-- LIKE opertator will use to get records based on pattern. --
+-- WHERE CustomerName LIKE 'a%'   Finds any values that start with "a"
+-- WHERE CustomerName LIKE '%a'   Finds any values that end with "a"
+-- WHERE CustomerName LIKE '%or%' Finds any values that have "or" in any position
+-- WHERE CustomerName LIKE '_r%'  Finds any values that have "r" in the second position
+-- WHERE CustomerName LIKE 'a_%'  Finds any values that start with "a" and are at least 2 character in length
+-- WHERE CustomerName LIKE 'a__%' Finds any values that start with "a" and are at least 3 character in length
+-- WHERE CustomerName LIKE 'a%o'  Finds any values that start with "a" and ends with "o"
+
+
+-- Create database
+create database datamites_student;
+
+-- enter into databse
+use datamites_student;
+
+-- drop database
+drop database demo1;
+
+-- see database
+show databases;
+
+-- create table;
+create table employee(emp_id int primary key,
+emp_name varchar(20),
+dept_name varchar(20),
+emp_salary int);
+
+show tables;
+
+select * from employee;
+
+insert into employee values
+("101","john","HR",10000),
+("201","mary","Finance",20000),
+("301","Zara","IT",30000),
+("401","Rida","Sales",50000),
+("501","Ram","HR",40000),
+("601","Varun","IT",70000),
+("701","Abhishek","HR",60000),
+("801","Joy","IT",80000),
+("901","Arun","Sales",40000),
+("1001","Joi","Finance",35000),
+("1002","diya","Finance",25000);
+
+	-- How many employee is there?
+select count(*) from employee;
+
+	-- find minimum salary
+select min(emp_salary) from employee;
+
+	-- find maximum salary
+select max(emp_salary) from employee;
+
+	-- find avaerage of salary
+select avg(emp_salary) from employee;
+
+	-- find total salary
+select sum(emp_salary) from employee;
+
+	-- what is the minimum salary in HR department?
+select min(emp_salary) from employee where dept_name = 'HR';
+
+	-- what is the average salary in IT department?
+select avg(emp_salary) from employee where dept_name = 'IT';
+
+	-- what is maximum salary in sales department?
+select max(emp_salary) from employee where dept_name = 'Sales';
+
+	-- what is average salary in finance department?
+select avg(emp_salary) from employee where dept_name = 'Finance';
+
+	-- what is maximum salary in IT deparment?
+select max(emp_salary) from employee where dept_name = 'IT';
+
+	-- find unique department from employee table
+select distinct(dept_name) from employee;
+
+	-- find total unique department count
+select count(distinct(dept_name)) from employee;
+
+	-- what is the minimum salary of each department?
+select dept_name, min(emp_salary) from employee group by dept_name;
+
+	-- what is the maximum salary of each department?
+select dept_name, max(emp_salary) from employee group by dept_name;
+
+	-- Find average of each department
+select dept_name, avg(emp_salary) from employee group by dept_name;
+
+	-- find how many employee in each department
+select dept_name, count(emp_name) from employee group by dept_name;
+
+	-- find total pay to each employee in each department
+select dept_name, sum(emp_salary) from employee group by dept_name;
+
+	-- find total pay to each employee in each department Order by sum of employee salary
+select dept_name, sum(emp_salary) from employee group by dept_name order by sum(emp_salary) desc;
+
+	-- find employee in each department order by employee salary
+select dept_name from employee group by dept_name order by sum(emp_salary) desc;
+
+	-- find average salary into asc and desc format
+select dept_name, avg(emp_salary) from employee group by dept_name order by avg(emp_salary) desc;
+
+	-- find maximum salary into each department order by asc and desc format
+select dept_name, max(emp_salary) from employee group by dept_name order by max(emp_salary) desc;
+
+	-- find minimum salary into each department order by asc and desc format
+select dept_name, min(emp_salary) from employee group by dept_name order by min(emp_salary) desc;
+
+	-- Having Clause
+	-- find department name maximum salary bigger than average salary
+select dept_name, max(emp_salary) from employee group by dept_name having avg(emp_salary)<max(emp_salary);
+
+	-- find department name more than 2 employee 
+select dept_name, count(emp_id) from employee group by dept_name having count(emp_id) > 2;
+
+	-- find department name less than 2 employee 
+select dept_name, count(emp_id) from employee group by dept_name having count(emp_id) <= 2;
+
+-- To update any value of table
+update student_info set Marks = 34 where id = "S104";
+
+-- To update any multiple value of table 
+update student_info set Name = "Jack willson",Age = 21, subject = "English" where id = "S103";
+
+rollback;
+
+set autocommit = off;
+
+update student_info set marks = 94 where id = "S104";
+
+-- delete a single Records
+delete from student_info where id = "S104";
+
+update student_info set marks = 70, subject = "drawing" where id = "S105";
+
+-- delete id S101,S103,S105,S107,S109
+
+delete from student_info where id in ("S101","S103","S105","S105","S107","S109");
+
+update student_info set Age = 20;
+
+rollback;
+
+set autocommit = off;
+
+select * from student_info;
+
+-- alter >> column ADD,rename, Modify and Drop.
+-- Single Column ADD
+alter table student_info add column Roll_num int;
+
+select * from student_info;             
+
+-- Multiple column Add
+alter table student_info add column Subject_2 varchar(20),add column Subject_3 varchar(25);
+
+-- drop single Column
+alter table student_info drop column Roll_num;
+
+-- drop multiple column
+alter table student_info drop subject_2, drop column subject_3;
+
+-- Rename single column
+-- alter table student_info Rename column subject to subject_1;
+
+desc student_info;
+
+alter table student_info modify column name varchar(30);
+
+truncate student_info;
+
+rollback;
+
+-- sub query
+select * from employee where emp_salary = (select min(emp_salary) from employee where dept_name = "HR");
+
+select * from employee where emp_salary = (select emp_salary > 40000 from employee where dept_name = "IT");
+
+select emp_salary from employee where dept_name = "IT" having emp_salary > 40000;
+
+
+select emp_salary from employee where dept_name = "Sales" having emp_salary < 25000;
+
+select * from employee where emp_salary = (select min(emp_salary) from employee);
+
+select min(emp_salary) from employee group by dept_name; 
+
+select * from employee where emp_salary in (select max(emp_salary) from employee group by dept_name order by max(emp_salary) desc);
+
+select count(*) from train where age < 10; 
+
+select count(*) from train where age in (10,20,30,40,50,60,70,80);
+
+select count(*) from train where age between 25 and 30;
+
+-- member opertaor use "in" multiple condition
+-- "between" operator use where range in condition
+
+select * from train where age = (select max(age) from train);
+
+select distinct(pclass) from train;
+
+select pclass,max(age) from train where group by pclass;
+
+select * from train where age in (select max(age) from train group by pclass);
+
+select * from train where survived = 1 and age between 60 and 75 order by age limit 3;
+
+select * from train order by age desc limit 1 offset 2;
+
+select * from train order by age desc limit 10 offset 10;
+
+select * from train where name like "a%";
+
+select * from train where name like "%z";
+
+select * from train where name like "b%";
+
+select * from train where name like "a%z";
+
+select * from train where name like "x%z";
+
+select * from train where name like "a%y";
+
+select * from train where name like "u%";
+
+select * from train where name like "b%a";
+
+select * from train where name like "%oha%;
+
+select * from train where name like "att___%";
+
+select * from train where name like "he____%";
+
+select * from train where name like "asp%x";
+
+select * from train where name like "%don%";
+
+select * from train where name like "%bhai%";
+
+
+-- Right join --
+-- when we wants to get only that records which are only in right tables and also matching records from the tables that time we use right join --
+
+select empid,empname,salary,department 
+
+
+
+
+
+
+
+
+
+
